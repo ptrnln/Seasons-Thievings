@@ -44,7 +44,7 @@ comfortable interacting with the Canvas API.
 ## Bonus features
 - An item system including but not limited to: weapons like **Candy Cane** which will extend your reach, and **Snowglobes** which will *explode and freeze nearby enemies on impact*.
 - Make presents actually drop from enemies which will then need to be recovered by walking over them.
-- More robust enemy pathfinding that will allow them to go for dropped presents if they are closer than the sleigh and navigate around boundaries, which the player will be prompted to place before the start of game to maximize their on-screen time.
+- More robust enemy pathfinding that will allow them to go for dropped presents if they are closer than the sleigh and navigate around boundaries, which the player will be prompted to place before the start of game to maximize enemies' on-screen time.
 - More levels of increasing difficulty.
 - Gather all the above features under a shop menu that you will have access to in-between levels. You will earn currency based on # of gifts stolen and "holiday spirit" left at end of level. High scores will be determined by the last completed level and currency left unspent.
 
