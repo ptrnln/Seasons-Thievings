@@ -1,5 +1,7 @@
+@import "./styles/reset.scss";
 @import "./styles/example.scss";
 
 #main {
-    color: purple;
+    color: $color;
+    border: solid 5px $color;
 }
