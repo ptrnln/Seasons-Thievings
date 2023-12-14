@@ -1,0 +1,1 @@
+{"version":3,"file":"main.css","mappings":"AAEA,MACI,a","sources":["webpack://seasons_beatings/./src/index.scss"],"sourcesContent":["@import \"./styles/example.scss\";\n\n#main {\n    color: purple;\n}"],"names":[],"sourceRoot":""}
