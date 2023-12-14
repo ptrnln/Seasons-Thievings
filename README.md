@@ -2,7 +2,7 @@
 A top-down beat 'em up style game with a cheerful Christmas theme
 ## Background
 You are an elf within the ranks of Santa's global outlet mall network. This time of year always brings out the best in people,
-as you find yourself fending off these would-be grinches, who are poaching presents meant for local underprivileged children straight from Santa's sleigh.
+as you find yourself fending off these would-be grinches, who have the audacity to poach presents meant for local underprivileged children - straight from Santa's sleigh.
 
 The objectives are simple:
 - To win, you must make it to the end of the time limit and still have presents in the sleigh, as indicated by a "holiday spirit" bar that depletes with each stolen gift,
