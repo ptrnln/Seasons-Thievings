@@ -1,23 +1,18 @@
-class Entity {
-    constructor(id, name, pos = [0, 0]) {
-        this.id = id;
-        this.name = name;
-        this.pos = pos;
-        this.redraw = this.redraw.bind(this)
-        this.width = .1;
-        this.height = .1;
+import GameObject from "./game_object";
+
+class Entity extends GameObject {
+    constructor(id, pos = [0, 0]) {
+        super(id, pos);
+        this.render = this.render.bind(this)
+        this.fullWidth = 50;
+        this.fullHeight = 50;
+        this.width = window.canvas.dataset.scale * this.fullHeight;
+        this.height = window.canvas.dataset.scale * this.fullWidth;
     }
 
-    redraw(ctx) {
-        // let that = this;
-        ctx.fillStyle = 'red'
-        ctx.fillRect(
-            this.pos[0], // x coordinate
-            this.pos[1], // y coordinate
-            (Math.floor(this.width * ctx.canvas.width)), // width (relative to canvas size)
-            (Math.floor(this.height * ctx.canvas.width)) // height
-        )
-    }
+    // render() {
+    //     console.log("I'm in the entity's render method!");
+    // }
 }
 
 export default Entity;

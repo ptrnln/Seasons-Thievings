@@ -6,24 +6,37 @@ class Game {
         this.ele = ele;
         this.ctx = this.ele.getContext("2d");
         this.redraw = this.redraw.bind(this);
-        this.spawnEntity = this.spawnEntity.bind(this);
-        this.entities = [];
+        // this.spawnObject = this.spawnObject.bind(this);
+        this.gameObjects = [];
 
-        this.ctx.fillStyle = 'black';
-        this.ctx.fillRect(0, 0, this.ele.width, this.ele.height);
-        this.entities.push(new Player(this.entities.length, "player"));
+        let player = new Player(this.gameObjects.length);
+
+        this.player = player;
+        this.gameObjects.push(player);
+
+
+        // this.spawnObject("player")
+        // this.spawnObject("player", [50, 50])
     }
 
     redraw() {
-        this.ctx.fillRect(0, 0, this.ele.width, this.ele.height);
-        this.entities.forEach((entity) => {
-            entity.redraw(this.ctx)
+        this.gameObjects.forEach((object) => {
+            object.render()
         })
     }
 
-    spawnEntity(name) {
-        this.entities.push(new Entity(this.entities.length, name));
-    }
+    // spawnObject(type = "entity", pos = [0, 0]) {
+    //     switch (type) {
+    //         case "entity":
+    //             this.gameObjects.push(new Entity(this.gameObjects.length), pos);
+    //             break;
+    //         case "player":
+    //             if (this.gameObjects.every((entity) => entity.constructor.name !== "Player")) {
+    //                 this.gameObjects.push(new Player(this.gameObjects.length, pos));
+    //             }
+    //             break;
+    //     }
+    // }
 }
 
 export default Game;
