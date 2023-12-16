@@ -1,17 +1,35 @@
 import Entity from "./entity.js";
 
 class Player extends Entity {
-    constructor(id, pos = [0.0, 0.0]) {
-        super(id, pos);
+    constructor(canvas, id, pos = [0, 0]) {
+        super(canvas, id, pos);
         this.fullWidth = 50;
         this.fullHeight = 50;
-        this.width = window.canvas.dataset.scale * this.fullHeight;
-        this.height = window.canvas.dataset.scale * this.fullWidth;
+        this.width = canvas.dataset.scale * this.fullHeight;
+        this.height = canvas.dataset.scale * this.fullWidth;
+        this.speed = 2;
+        this.move = this.move.bind(this);
     }
 
 
-    move() {
-        this.pos = newPos;
+    
+
+
+    move(dir) {
+        console.log(dir)
+        switch(dir) {
+            case "u":
+                this.pos[1] -= this.speed;
+                break;
+            case "l":
+                this.pos[0] -= this.speed;
+                break;
+            case "d":
+                this.pos[1] += this.speed;
+                break;
+            case "r":
+                this.pos[0] += this.speed;
+        }
     }
 
 }

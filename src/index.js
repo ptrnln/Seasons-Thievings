@@ -3,23 +3,22 @@ const { default: GameView } = require("./scripts/game_view");
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    window.canvas = document.getElementById("game-canvas");
-    window.ctx = canvas.getContext("2d");
+    let canvas = document.getElementById("game-canvas");
+    let ctx = canvas.getContext("2d");
 
-    window.canvas.dataset.maxWidth = 1200;
+    canvas.dataset.maxWidth = 1200;
     
-    visualViewport.addEventListener("resize", this.onresize);
+    visualViewport.addEventListener("resize", onresize);
 
-    var maxWidth = canvas.dataset.maxWidth;
+    let maxWidth = canvas.dataset.maxWidth;
     
-    const targetWidth = Math.floor(.8 * window.innerWidth);
-    window.canvas.width = targetWidth > maxWidth ? maxWidth : targetWidth;
-    window.canvas.height = Math.floor(.75 * window.canvas.width);
-    window.canvas.dataset.scale = window.canvas.width / maxWidth;
+    let targetWidth = Math.floor(.8 * window.innerWidth);
+    canvas.width = targetWidth > maxWidth ? maxWidth : targetWidth;
+    canvas.height = Math.floor(.75 * canvas.width);
+    canvas.dataset.scale = canvas.width / maxWidth;
     
-    console.log(window.canvas);
-    
-    var gameView = new GameView();
+    let game = new Game(canvas)
+    let gameView = new GameView(game, canvas);
 
     // canvas.addEventListener('click', (evt) => {
     //     let mousePos = getMousePos(canvas, evt);
@@ -31,14 +30,33 @@ document.addEventListener("DOMContentLoaded", () => {
     //     }
     // }, false);
 
-    this.game = new Game(window.canvas);
-
-    onresize = (e) => {
-        const targetWidth = Math.floor(.8 * window.innerWidth)
-        window.canvas.width = targetWidth > maxWidth ? maxWidth : targetWidth;
-        window.canvas.height = Math.floor(.75 * window.canvas.width);
-        window.canvas.dataset.scale = window.canvas.width / maxWidth;
+    function onresize(e) {
+        console.log(canvas);
+        canvas.width = targetWidth > maxWidth ? maxWidth : targetWidth;
+        canvas.height = Math.floor(.75 * canvas.width);
+        canvas.dataset.scale = canvas.width / maxWidth;
         gameView.resize();
+    }
+
+    window.onkeydown = (e) => {
+        switch(e.code) {
+            case "ArrowUp":
+            case "KeyW":
+                game.player.move("u");
+                break;
+            case "ArrowLeft":
+            case "KeyA":
+                game.player.move("l");
+                break;
+            case "ArrowDown":
+            case "KeyS":
+                game.player.move("d");
+                break;
+            case "ArrowRight":
+            case "KeyD":
+                game.player.move("r");
+                break;
+        }
     }
 
     // function getMousePos(canvas, event) {
