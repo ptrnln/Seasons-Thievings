@@ -1,4 +1,5 @@
 import Game from "./game"
+import Player from "./player";
 
 class GameView {
     constructor(game, canvas) {
@@ -10,19 +11,19 @@ class GameView {
         }
 
     gameRender = function() {
-        // console.log("running");
+        // console.log(this.game.player);
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         requestAnimationFrame(this.gameRender);
         this.game.gameObjects.forEach((gameObject) => {
-            gameObject.render();
+            gameObject.update();
         })
     }
 
-    resize() {
-        this.game.gameObjects.forEach((object) => {
-            object.resize();
-        })
-    }
+    // resize() {
+    //     this.game.gameObjects.forEach((object) => {
+    //         object.resize();
+    //     })
+    // }
 }
 
 export default GameView;

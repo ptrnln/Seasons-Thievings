@@ -3,7 +3,7 @@ import Player from "./player";
 
 class Game {
     constructor(canvas) {
-        // this.canvas = canvas;
+        this.canvas = canvas;
         // this.ctx = this.canvas.getContext("2d");
         // this.redraw = this.redraw.bind(this);
         // this.spawnObject = this.spawnObject.bind(this);

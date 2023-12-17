@@ -6,16 +6,19 @@ document.addEventListener("DOMContentLoaded", () => {
     let canvas = document.getElementById("game-canvas");
     let ctx = canvas.getContext("2d");
 
-    canvas.dataset.maxWidth = 1200;
+    canvas.dataset.maxWidth = 900;
     
-    visualViewport.addEventListener("resize", onresize);
+    // visualViewport.addEventListener("resize", onresize);
 
-    let maxWidth = canvas.dataset.maxWidth;
+    // let maxWidth = parseInt(canvas.dataset.maxWidth);
     
-    let targetWidth = Math.floor(.8 * window.innerWidth);
-    canvas.width = targetWidth > maxWidth ? maxWidth : targetWidth;
-    canvas.height = Math.floor(.75 * canvas.width);
-    canvas.dataset.scale = canvas.width / maxWidth;
+    // let targetWidth = Math.floor(.60 * window.innerWidth);
+    // canvas.width = targetWidth > maxWidth ? maxWidth : targetWidth;
+    // canvas.height = Math.floor(.60 * canvas.width);
+    // canvas.dataset.scale = canvas.width / maxWidth;
+
+    canvas.width = canvas.dataset.maxWidth;
+    canvas.height = (.60 * canvas.width);
     
     let game = new Game(canvas)
     let gameView = new GameView(game, canvas);
@@ -30,34 +33,13 @@ document.addEventListener("DOMContentLoaded", () => {
     //     }
     // }, false);
 
-    function onresize(e) {
-        console.log(canvas);
-        canvas.width = targetWidth > maxWidth ? maxWidth : targetWidth;
-        canvas.height = Math.floor(.75 * canvas.width);
-        canvas.dataset.scale = canvas.width / maxWidth;
-        gameView.resize();
-    }
-
-    window.onkeydown = (e) => {
-        switch(e.code) {
-            case "ArrowUp":
-            case "KeyW":
-                game.player.move("u");
-                break;
-            case "ArrowLeft":
-            case "KeyA":
-                game.player.move("l");
-                break;
-            case "ArrowDown":
-            case "KeyS":
-                game.player.move("d");
-                break;
-            case "ArrowRight":
-            case "KeyD":
-                game.player.move("r");
-                break;
-        }
-    }
+    // function onresize(e) {
+    //     targetWidth = Math.floor(.60 * window.innerWidth);
+    //     canvas.width = targetWidth > maxWidth ? maxWidth : targetWidth;
+    //     canvas.height = Math.floor(.60 * canvas.width);
+    //     canvas.dataset.scale = canvas.width / maxWidth;
+    //     gameView.resize();
+    // }
 
     // function getMousePos(canvas, event) {
     //     let rect = canvas.getBoundingClientRect();
@@ -95,6 +77,4 @@ document.addEventListener("DOMContentLoaded", () => {
 //         context.closePath();
 //     }
 //     canvas.append(new FullScreenButton(rect, 2, "black"));
-    
-
 })

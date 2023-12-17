@@ -10,11 +10,6 @@ class Entity extends GameObject {
         this.height = canvas.dataset.scale * this.fullWidth;
     }
 
-    
-
-    // render() {
-    //     console.log("I'm in the entity's render method!");
-    // }
 }
 
 export default Entity;

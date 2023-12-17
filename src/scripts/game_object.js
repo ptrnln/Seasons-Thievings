@@ -4,15 +4,14 @@ class GameObject {
         this.pos = pos;
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
-        this.render = this.render.bind(this)
+        // this.render = this.render.bind(this)
         this.fullWidth = 50;
         this.fullHeight = 50;
-        this.width = canvas.dataset.scale * this.fullHeight;
-        this.height = canvas.dataset.scale * this.fullWidth;
+        this.width = this.fullHeight;
+        this.height = this.fullWidth;
     }
 
     render() {
-        // console.log(this.pos);
         this.ctx.fillStyle = 'red';
         this.ctx.fillRect(
             this.pos[0], // x coordinate
@@ -22,10 +21,12 @@ class GameObject {
         )
     }
 
-    resize() {
-        this.width = this.canvas.dataset.scale * this.fullWidth;
-        this.height = this.canvas.dataset.scale * this.fullHeight;
-    }
+    // resize() {
+    //     this.pos[0] = Math.floor(this.canvas.dataset.scale * this.pos[0]);
+    //     this.pos[1] = Math.floor(this.canvas.dataset.scale * this.pos[1]);
+    //     this.width = this.canvas.dataset.scale * this.fullWidth;
+    //     this.height = this.canvas.dataset.scale * this.fullHeight;
+    // }
 
 }
 
