@@ -2,9 +2,13 @@ class GameObject {
     constructor(canvas, id, pos = [0, 0]) {
         this.id = id;
         this.pos = pos;
+        this.left = () => this.pos[0];
+        this.right = () => this.pos[0] + this.width;
+        this.top = () => this.pos[1];
+        this.bottom = () => this.pos[1] + this.height;
         this.canvas = canvas;
         this.ctx = canvas.getContext("2d");
-        // this.render = this.render.bind(this)
+        this.render = this.render.bind(this)
         this.fullWidth = 50;
         this.fullHeight = 50;
         this.width = this.fullHeight;
@@ -19,6 +23,12 @@ class GameObject {
             this.width, // width
             this.height // height
         )
+    }
+
+    update() {
+        this.pos = this.getMove();
+        this.animationTimer--;
+        this.render();
     }
 
     // resize() {

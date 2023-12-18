@@ -4,9 +4,13 @@ const { default: GameView } = require("./scripts/game_view");
 
 document.addEventListener("DOMContentLoaded", () => {
     let canvas = document.getElementById("game-canvas");
-    let ctx = canvas.getContext("2d");
+    // let ctx = canvas.getContext("2d");
 
     canvas.dataset.maxWidth = 900;
+    canvas.width = canvas.dataset.maxWidth;
+    canvas.height = (.60 * canvas.width);
+
+    // document.body.appendChild(app.view)
     
     // visualViewport.addEventListener("resize", onresize);
 
@@ -17,8 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     // canvas.height = Math.floor(.60 * canvas.width);
     // canvas.dataset.scale = canvas.width / maxWidth;
 
-    canvas.width = canvas.dataset.maxWidth;
-    canvas.height = (.60 * canvas.width);
     
     let game = new Game(canvas)
     let gameView = new GameView(game, canvas);

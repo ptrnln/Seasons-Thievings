@@ -29,6 +29,7 @@ class Keyboard {
             !!this.keyMap["ArrowDown"] || !!this.keyMap["KeyS"],
             !!this.keyMap["ArrowRight"] || !!this.keyMap["KeyD"]
         ]);
+        console.log(this.keyMap)
         if (dirArrStr === '[true,false,false,false]' || dirArrStr === '[true,true,false,true]') return "u";
         if (dirArrStr === '[false,true,false,false]' || dirArrStr === '[true,true,true,false]') return "l";
         if (dirArrStr === '[false,false,true,false]' || dirArrStr === '[false,true,true,true]') return "d";

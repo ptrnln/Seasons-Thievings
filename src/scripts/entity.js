@@ -10,6 +10,8 @@ class Entity extends GameObject {
         this.height = canvas.dataset.scale * this.fullWidth;
     }
 
+    
+
 }
 
 export default Entity;

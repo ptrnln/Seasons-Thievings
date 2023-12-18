@@ -5,26 +5,81 @@ class Player extends Entity {
     constructor(canvas, id, pos = [0, 0]) {
         super(canvas, id, pos);
         this.keyboard = new Keyboard();
-        this.fullWidth = 25;
-        this.fullHeight = 25;
-        this.width = this.fullHeight;
-        this.height = this.fullWidth;
-        this.speed = 2;
+        this.ctx = canvas.getContext("2d");
+        this.animations = {
+            "walkRight": [],
+            "walkLeft": [],
+            "walkDown": [],
+            "walkUp": []
+        };
+
+        for(let i = 1; i <= 6; i++) {
+            let img = new Image();
+            let img2 = new Image();
+            let img3 = new Image();
+            let img4 = new Image()
+            img.src = `./assets/elf_walk_side_${i}.png`
+            img2.src = `./assets/elf_walk_left_${i}.png`
+            img3.src = `./assets/elf_walk_down_${i}.png`
+            img4.src = `./assets/elf_walk_up_${i}.png`
+            this.animations.walkRight.push(img);
+            this.animations.walkLeft.push(img2);
+            this.animations.walkDown.push(img3);
+            this.animations.walkUp.push(img4);
+        };
+        this.lastLoop;
+        this.currentLoop = (dir = this.facing()) => {
+            switch (dir) {
+                case "l":
+                    return this.lastLoop = "walkLeft";
+                case "r":
+                    return this.lastLoop ="walkRight";
+                case "d":
+                    return this.lastLoop = "walkDown";
+                case "u":
+                    return this.lastLoop = "walkUp";
+            }
+            return "walkUp";
+        };
+        this.width = this.animations[this.currentLoop()][0].width;
+        this.height = this.animations[this.currentLoop()][0].height;
+        this.speed = 3;
         this.render = this.render.bind(this);
         this.update = this.update.bind(this);
         this.getMove = this.getMove.bind(this);
         this.enforceBounds = this.enforceBounds.bind(this);
+        this.animationLooper = setInterval((that = this) => {
+            that.animations[that.currentLoop()] =
+            that.animations[that.currentLoop()].slice(1).concat(that.animations[that.currentLoop()].slice(0, 1));
+        }, 75);
+    }
+
+    render() {
+        this.ctx.drawImage(this.animations[this.currentLoop()][0], ...this.pos)
     }
     
 
-    update() {
-        this.pos = this.getMove();
-        this.render();
+    facing() {
+        switch(this.keyboard.lastPressed) {
+            case "ArrowUp":
+            case "KeyW":
+                return "u";
+            case "ArrowLeft":
+            case "KeyA":
+                return "l";
+            case undefined:
+            case "ArrowDown":
+            case "KeyS":
+                return "d";
+            case "ArrowRight":
+            case "KeyD":
+                return "r";
+        }
+        return "d";
     }
 
     enforceBounds(newPos) {
-        let i = 0;
-        newPos = newPos.map((coord) => {
+        newPos = newPos.map((coord, i = 0) => {
             if (i === 0) {
                 if (coord < 0) return 0;
                 if (coord + this.width > this.canvas.width) return this.canvas.width - this.width;
