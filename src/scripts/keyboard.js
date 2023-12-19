@@ -3,49 +3,64 @@ class Keyboard {
         this.keyMap = {};
 
         this.getMove = this.getMove.bind(this);
+        this.keybindings = {
+            up: ["KeyW", "ArrowUp"],
+            left: ["KeyA", "ArrowLeft"],
+            down: ["KeyS", "ArrowDown"],
+            right: ["KeyD", "ArrowRight"],
+            // attack: ["Space"]
+            enterDebug: ["Tab"]
+        }
         this.lastPressed;
         this.lastReleased;
         
         document.addEventListener("keydown", (e) => {
             e = e || event;
             if (e.repeat) return;
-            this.keyMap[e.code] = (e.type === 'keydown');
-            this.lastPressed = e.code;
+            if (this.listKeybindings().includes(e.code)) {
+                if (e.code === "Tab") debugger;
+                this.keyMap[e.code] = (e.type === 'keydown');
+                this.lastPressed = e.code;
+            }
         });
 
         document.addEventListener("keyup", (e) => {
             e = e || event;
             if (e.repeat) return;
-            this.keyMap[e.code] = (e.type === 'keydown');
-            this.lastReleased = e.code;
+            if (this.listKeybindings().includes(e.code)) {
+                this.keyMap[e.code] = (e.type === 'keydown');
+                this.lastReleased = e.code;
+            }
         });
     }
     
 
     getMove() {
-        let dirArrStr = JSON.stringify([
-            !!this.keyMap["ArrowUp"] || !!this.keyMap["KeyW"],
-            !!this.keyMap["ArrowLeft"] || !!this.keyMap["KeyA"],
-            !!this.keyMap["ArrowDown"] || !!this.keyMap["KeyS"],
-            !!this.keyMap["ArrowRight"] || !!this.keyMap["KeyD"]
-        ]);
-        console.log(this.keyMap)
-        if (dirArrStr === '[true,false,false,false]' || dirArrStr === '[true,true,false,true]') return "u";
-        if (dirArrStr === '[false,true,false,false]' || dirArrStr === '[true,true,true,false]') return "l";
-        if (dirArrStr === '[false,false,true,false]' || dirArrStr === '[false,true,true,true]') return "d";
-        if (dirArrStr === '[false,false,false,true]' || dirArrStr === '[true,false,true,true]') return "r";
-        if (dirArrStr === '[true,true,false,false]') return "ul";
-        if (dirArrStr === '[true,false,false,true]') return "ur";
-        if (dirArrStr === '[false,true,true,false]') return "dl";
-        if (dirArrStr === '[false,false,true,true]') return "dr";
-        if ([
-            '[false,false,false,false]',
-            '[true,true,true,true]',
-            '[true,false,true,false]',
-            '[false,true,false,true]'
-        ].some(map => map === dirArrStr)) {
+        let dirStr = "";
+        (!!this.keyMap["ArrowUp"] || !!this.keyMap["KeyW"]) ? dirStr += 't' : dirStr += 'f';
+        (!!this.keyMap["ArrowLeft"] || !!this.keyMap["KeyA"]) ? dirStr += 't' : dirStr += 'f';
+        (!!this.keyMap["ArrowDown"] || !!this.keyMap["KeyS"]) ? dirStr += 't' : dirStr += 'f';
+        (!!this.keyMap["ArrowRight"] || !!this.keyMap["KeyD"]) ? dirStr += 't' : dirStr += 'f';
+
+        if (dirStr === 'tfff' || dirStr === 'ttft') return "u";
+        if (dirStr === 'ftff' || dirStr === 'tttf') return "l";
+        if (dirStr === 'fftf' || dirStr === 'fttt') return "d";
+        if (dirStr === 'ffft' || dirStr === 'tftt') return "r";
+        if (dirStr === 'ttff') return "ul";
+        if (dirStr === 'tfft') return "ur";
+        if (dirStr === 'fttf') return "dl";
+        if (dirStr === 'fftt') return "dr";
+        if (['ffff','tttt','tftf','ftft'].some(map => map === dirStr)) {
                 return "s";
         }
+    }
+    
+    listKeybindings() {
+        let list = [];
+        for(let key in this.keybindings) {
+            this.keybindings[key].forEach(value => list.push(value));
+        }
+        return list;
     }
 }
 

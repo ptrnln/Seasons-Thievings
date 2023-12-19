@@ -1,5 +1,6 @@
 import Game from "./game"
 import Player from "./player";
+import GameObject from "./game_object";
 
 class GameView {
     constructor(game, canvas) {
@@ -13,15 +14,30 @@ class GameView {
         }
 
     gameRender = function() {
-        // console.log(this.game.player);
+        let objects = this.game.gameObjects;
         requestAnimationFrame(this.gameRender);
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.background, 0, 0);
-        this.game.gameObjects.forEach((gameObject) => {
+        objects.forEach((gameObject) => {
             gameObject.update();
-            // console.log(`[${gameObject.constructor.name}]: 
-            // left: ${gameObject.left()}, right: ${gameObject.right()} 
-            // top: ${gameObject.top()}, bottom: ${gameObject.bottom()}`)
+
+            for (let i = 0; i < objects.length; i++) {
+                for (let ii = 0; ii < objects.length; ii++) {
+                    if (ii > i && objects[i].collidesWith(objects[ii])){
+                        this.game.handleCollision(objects[i], objects[ii]);
+                    }
+                }
+            }
+            // this.ctx.beginPath();
+            // this.ctx.moveTo(this.canvas.width, gameObject.centerVert());
+            // this.ctx.lineTo(0, gameObject.centerVert());
+            // this.ctx.stroke();
+            // this.ctx.beginPath();
+            // this.ctx.moveTo(gameObject.centerHorz(), this.canvas.height);
+            // this.ctx.lineTo(gameObject.centerHorz(), 0);
+            // this.ctx.stroke();
+
+            gameObject.render();
         })
     }
 
