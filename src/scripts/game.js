@@ -1,6 +1,8 @@
+import Enemy from "./enemy";
 import Entity from "./entity";
 import GameObject from "./game_object";
 import Player from "./player";
+import Sleigh from "./sleigh";
 
 class Game {
     constructor(canvas) {
@@ -13,14 +15,22 @@ class Game {
 
         // let player = new Player(this.gameObjects.length);
         this.paused = false;
-        this.player = new Player(canvas, this.gameObjects.length);
+        this.player = new Player(this, canvas, this.gameObjects.length);
         
-        
+        this.addObject = this.addObject.bind(this)
+        this.removeObject = this.removeObject.bind(this);
         this.addObject(this.player);
-        this.addObject(new GameObject(
-            canvas, 
-            this.gameObjects.length, 
-            [(canvas.width / 2), (canvas.height / 2)]))
+        this.addObject(new Sleigh(
+            this,
+            this.canvas,
+            this.gameObjects.length
+        ))
+        this.addObject(new Enemy(
+            this,
+            this.canvas,
+            this.gameObjects.length,
+            [(canvas.width / 2) + 150, (canvas.height / 2) + 150]))
+
     }
 
     pause() {
@@ -36,7 +46,7 @@ class Game {
     }
 
     removeObject(gameObject) {
-        this.gameObjects = this.gameObjects.slice(0, gameObject.id).concat(this.gameObjects.slice(gameObject.id))
+        this.gameObjects = this.gameObjects.slice(0, gameObject.id).concat(this.gameObjects.slice(gameObject.id + 1))
     }
 
     handleCollision(obj1, obj2) {

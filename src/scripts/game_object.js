@@ -1,31 +1,54 @@
 class GameObject {
-    constructor(canvas, id, pos) {
+    constructor(game, canvas, id, pos = [0, 0]) {
+        this.game = game;
         this.id = id;
-        this.pos = pos || [0, 0];
+        this.pos = pos;
         this.lastPos = pos;
+        this.canvas = canvas;
+        this.ctx = canvas.getContext("2d");
         this.fullWidth = 50;
         this.fullHeight = 50;
         this.width = this.fullHeight;
         this.height = this.fullWidth;
         this.tangible = true;
         this.static = true;
-        this.left = () => this.pos[0];
-        this.right = () => this.pos[0] + this.width;
-        this.top = () => this.pos[1];
-        this.bottom = () => this.pos[1] + this.height;
-        this.centerVert = () => {
-            let top = this.top();
-            return (this.bottom() - top) / 2 + top;
-        }
-        this.centerHorz = () => {
-            let left = this.left();
-            return (this.right() - left) / 2 + left;
-        }
-        this.canvas = canvas;
-        this.ctx = canvas.getContext("2d");
+        this.moving = false;
+        this.actionDisabled = false;
+        this.animCounter;
+        this.top = this.top.bind(this);
+        this.left = this.left.bind(this);
+        this.bottom = this.bottom.bind(this);
+        this.right = this.right.bind(this);
         this.render = this.render.bind(this);
         this.update = this.update.bind(this);
         this.getMove = this.getMove.bind(this);
+        this.collidesWith = this.collidesWith.bind(this);
+    }
+
+    left() {
+        return this.pos[0];
+    }
+
+    right() {
+        return this.pos[0] + this.width;
+    }
+    
+    top() {
+        return this.pos[1];
+    }
+    
+    bottom() {
+        return this.pos[1] + this.height;
+    }
+
+    centerVert = () => {
+        let top = this.top();
+        return (this.bottom() - top) / 2 + top;
+    }
+
+    centerHorz = () => {
+        let left = this.left();
+        return (this.right() - left) / 2 + left;
     }
 
     render() {
@@ -49,6 +72,7 @@ class GameObject {
     update() {
         this.lastPos = this.pos;
         if (!this.static) {
+            this.moving = true;
             this.pos = this.getMove();
         }
     }
@@ -94,6 +118,7 @@ class GameObject {
     }
 
     objRollback() {
+        this.moving = false;
         this.pos = this.lastPos;
     }
 

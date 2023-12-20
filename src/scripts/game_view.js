@@ -14,18 +14,24 @@ class GameView {
         }
 
     gameRender = function() {
+        if (this.game.paused) return;
         let objects = this.game.gameObjects;
         requestAnimationFrame(this.gameRender);
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.drawImage(this.background, 0, 0);
         objects.forEach((gameObject) => {
-            gameObject.update();
+            if (!gameObject.actionDisabled) gameObject.update();
 
             for (let i = 0; i < objects.length; i++) {
-                for (let ii = 0; ii < objects.length; ii++) {
-                    if (ii > i && objects[i].collidesWith(objects[ii])){
-                        this.game.handleCollision(objects[i], objects[ii]);
-                    }
+                // for (let ii = 0; ii < objects.length; ii++) {
+                //     if (ii > i && objects[i].collidesWith(objects[ii])){
+                //         this.game.handleCollision(objects[i], objects[ii]);
+                //     }
+                // }
+                if (i !== gameObject.id) {
+                    if (gameObject.collidesWith(objects[i])){
+                        this.game.handleCollision(gameObject, objects[i]);
+                    } 
                 }
             }
             // this.ctx.beginPath();
@@ -36,8 +42,7 @@ class GameView {
             // this.ctx.moveTo(gameObject.centerHorz(), this.canvas.height);
             // this.ctx.lineTo(gameObject.centerHorz(), 0);
             // this.ctx.stroke();
-
-            gameObject.render();
+           if (!gameObject.invisible) gameObject.render();
         })
     }
 

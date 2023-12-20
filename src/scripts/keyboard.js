@@ -8,7 +8,7 @@ class Keyboard {
             left: ["KeyA", "ArrowLeft"],
             down: ["KeyS", "ArrowDown"],
             right: ["KeyD", "ArrowRight"],
-            // attack: ["Space"]
+            attack: ["Space"],
             enterDebug: ["Tab"]
         }
         this.lastPressed;
@@ -36,6 +36,7 @@ class Keyboard {
     
 
     getMove() {
+        if(!!this.keyMap["Space"]) return "p";
         let dirStr = "";
         (!!this.keyMap["ArrowUp"] || !!this.keyMap["KeyW"]) ? dirStr += 't' : dirStr += 'f';
         (!!this.keyMap["ArrowLeft"] || !!this.keyMap["KeyA"]) ? dirStr += 't' : dirStr += 'f';
@@ -51,7 +52,7 @@ class Keyboard {
         if (dirStr === 'fttf') return "dl";
         if (dirStr === 'fftt') return "dr";
         if (['ffff','tttt','tftf','ftft'].some(map => map === dirStr)) {
-                return "s";
+                return "i";
         }
     }
     

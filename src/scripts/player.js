@@ -1,70 +1,122 @@
+import Attack from "./attack.js";
 import Entity from "./entity.js";
 import Keyboard from "./keyboard.js";
+import SpriteAnimation from "./sprite_animation.js"
 
 class Player extends Entity {
-    constructor(canvas, id, pos) {
-        super(canvas, id, pos);
+    constructor(game, canvas, id, pos) {
+        super(game, canvas, id, pos);
         this.keyboard = new Keyboard();
         this.ctx = canvas.getContext("2d");
+        this.top = this.top.bind(this);
+        this.left = this.left.bind(this);
+        this.bottom = this.bottom.bind(this);
+        this.right = this.right.bind(this);
         this.animations = {
-            "walkRight": [],
-            "walkLeft": [],
-            "walkDown": [],
-            "walkUp": []
+            "walk_right": new SpriteAnimation(
+                "walk_right", 
+                Array.from(document.querySelectorAll(".elf_walk_right")),
+                true
+                ),
+            "walk_left": new SpriteAnimation(
+                "walk_left",
+                Array.from(document.querySelectorAll(".elf_walk_left")),
+                true
+            "walkDown": Array.from(document.querySelectorAll(".elf_walk_down")),
+            "walkUp": Array.from(document.querySelectorAll(".elf_walk_up")),
+            "punchLeft": Array.from(document.querySelectorAll(".elf_punch_left")),
+            "punchRight": Array.from(document.querySelectorAll(".elf_punch_right")),
+            "idle": [
+            Array.from(document.querySelectorAll(".elf_walk_up"))[4],
+            document.querySelector(".elf_walk_left"),
+            document.querySelector(".elf_walk_down"),
+            document.querySelector(".elf_walk_right")
+            ]
         };
-
-        for(let i = 1; i <= 6; i++) {
-            let img = new Image();
-            let img2 = new Image();
-            let img3 = new Image();
-            let img4 = new Image()
-            img.src = `./assets/elf_walk_side_${i}.png`
-            img2.src = `./assets/elf_walk_left_${i}.png`
-            img3.src = `./assets/elf_walk_down_${i}.png`
-            img4.src = `./assets/elf_walk_up_${i}.png`
-            this.animations.walkRight.push(img);
-            this.animations.walkLeft.push(img2);
-            this.animations.walkDown.push(img3);
-            this.animations.walkUp.push(img4);
-        };
-
-        this.currentLoop = (dir = this.facing()) => {
-            switch (dir) {
-                case "l":
+        this.facing = "l";
+        this.moving = false;
+        this.punching = false;
+        this.actionDisabled = false;
+        this.currentLoop = () => {
+            let actionStr = "";
+            if (this.punching) { actionStr += "p-" }
+            else if (this.moving) { actionStr += "w-" }
+            else actionStr += "i-"
+            switch (actionStr + this.facing) {
+                case "w-u":
+                    return {
+                        name: "walk_up",
+                        content: this.animations["walk_up"],
+                        repeats: true
+                    }
+                case "i-u":
+                    return {
+                        name: "idle_up",
+                        content: [this.animations["idle"][0]],
+                        repeats: false
+                    }
+                case "w-l":
                     return { 
-                        name: "walkLeft",
-                        content: this.animations["walkLeft"]
-                    };
-                case "r":
+                        name: "walk_left",
+                        content: this.animations["walk_left"],
+                        repeats: true
+                    } 
+                case "i-l":
                     return {
-                        name: "walkRight",
-                        content: this.animations["walkRight"]
+                        name: "idle_left",
+                        content: [this.animations["idle"][1]],
+                        repeats: false
                     }
-                case "d":
+                case "p-l":
                     return {
-                        name: "walkDown",
-                        content: this.animations["walkDown"]
+                        name: "punch_left",
+                        content: this.animations["punch_left"],
+                        repeats: false
                     }
-                case "u":
+                case "w-d":
                     return {
-                        name: "walkUp",
-                        content: this.animations["walkUp"]
+                        name: "walk_down",
+                        content: this.animations["walk_down"],
+                        repeats: true
+                    }
+                case "i-d":
+                    return {
+                        name: "idle_down",
+                        content: [this.animations["idle"][2]],
+                        repeats: false
+                    }
+                case "w-r":
+                    return {
+                        name: "walk_right",
+                        content: this.animations["walk_right"],
+                        repeats: true
+                    }
+                case "i-r":
+                    return {
+                        name: "idle_right",
+                        content: [this.animations["idle"][3]],
+                        repeats: false
+                    }
+                    case "p-r":
+                        return {
+                        name: "punch_right",
+                        content: this.animations["punch_right"],
+                        repeats: false
                     }
             }
-            return "walkUp";
         };
-        this.width = this.currentLoop().content[0].width;
-        this.height = this.currentLoop().content[0].height;
+        this.hitBoxImg = new Image()
+        this.hitBoxImg.src = this.animations["walkLeft"][0].src;
+        this.width = this.hitBoxImg.width;
+        this.height = this.hitBoxImg.height;
         this.speed = 3;
         this.render = this.render.bind(this);
         this.update = this.update.bind(this);
         this.getMove = this.getMove.bind(this);
         this.enforceBounds = this.enforceBounds.bind(this);
-        this.animationLooper = setInterval((that = this) => {
-            let loop = that.currentLoop().content;
-            that.animations[that.currentLoop().name] = loop.slice(1).concat(loop.slice(0, 1));
-        }, 75);
         this.collidesWith = this.collidesWith.bind(this);
+        this.punch = this.punch.bind(this);
+        this.currentLoop = this.currentLoop.bind(this);
     }
 
     render() {
@@ -76,25 +128,6 @@ class Player extends Entity {
         // this.ctx.lineTo(this.left(), this.bottom());
         // this.ctx.lineTo(...this.pos);
         // this.ctx.stroke()
-    }
-    
-
-    facing() {
-        switch(this.keyboard.lastPressed) {
-            case "ArrowUp":
-            case "KeyW":
-                return "u";
-            case "ArrowLeft":
-            case "KeyA":
-                return "l";
-            case undefined:
-            case "ArrowDown":
-            case "KeyS":
-                return "d";
-            case "ArrowRight":
-            case "KeyD":
-                return "r";
-        }
     }
 
     enforceBounds(newPos) {
@@ -113,38 +146,106 @@ class Player extends Entity {
     }
 
     getMove() {
+        if (this.actionDisabled) return this.pos
         let dir = this.keyboard.getMove();
         let newPos;
         switch(dir) {
             case "u":
+                this.facing = "u";
                 newPos = [this.pos[0], (this.pos[1] - this.speed)];
                 break;
             case "l":
+                this.facing = "l"
                 newPos = [(this.pos[0] - this.speed), this.pos[1]];
                 break;
             case "d":
+                this.facing = "d"
                 newPos = [this.pos[0], (this.pos[1] + this.speed)];
                 break;
             case "r":
+                this.facing = "r"
                 newPos = [(this.pos[0] + this.speed), this.pos[1]];
                 break;
             case "ul":
+                this.facing = "l"
                 newPos = [(this.pos[0] - this.speed), (this.pos[1] - this.speed)];
                 break;
             case "ur":
+                this.facing = "r"
                 newPos = [(this.pos[0] + this.speed), (this.pos[1] - this.speed)];
                 break;
             case "dl":
+                this.facing = "l"
                 newPos = [(this.pos[0] - this.speed), (this.pos[1] + this.speed)];
                 break;
             case "dr":
+                this.facing = "r"
                 newPos = [(this.pos[0] + this.speed), (this.pos[1] + this.speed)];
                 break; 
-            case "s":
-                newPos = this.pos;
+            case "i":
+                this.moving = false;
+                return this.pos;
+            case "p":
+                this.punch();
+                return this.pos;
         }
         return this.enforceBounds(newPos);
     }
+
+    punch() {
+        if (this.punching) return;
+        this.actionDisabled = true;
+        this.punching = true;
+        this.moving = false;
+        let attackBoxSize = 25;
+        setTimeout(() => {
+            this.actionDisabled = false;
+            this.punching = false;
+        }, (75 * 6))
+        switch (this.facing) {
+            case "u":
+                this.game.addObject(new Attack(
+                    this.game, 
+                    this.canvas, 
+                    this.game.gameObjects.length,
+                    [(this.centerHorz() - attackBoxSize / 2), this.pos[0] - attackBoxSize],
+                    attackBoxSize,
+                    attackBoxSize
+                ))
+                break;
+            case "l":
+                this.game.addObject(new Attack(
+                    this.game, 
+                    this.canvas, 
+                    this.game.gameObjects.length,
+                    [this.pos[0] - attackBoxSize, (this.centerVert() - attackBoxSize / 2)],
+                    attackBoxSize,
+                    attackBoxSize
+                ))
+                break;
+            case "d":
+                this.game.addObject(new Attack(
+                    this.game, 
+                    this.canvas, 
+                    this.game.gameObjects.length,
+                    [(this.centerHorz() - attackBoxSize / 2), this.bottom()],
+                    attackBoxSize,
+                    attackBoxSize
+                ))
+                break;
+            case "r":
+                this.game.addObject(new Attack(
+                    this.game, 
+                    this.canvas, 
+                    this.game.gameObjects.length,
+                    [this.right(), (this.centerVert() - attackBoxSize / 2)],
+                    attackBoxSize,
+                    attackBoxSize
+                ))
+        }
+    }
+
+    
 
 }
 
