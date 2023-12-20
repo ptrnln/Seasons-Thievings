@@ -1,7 +1,15 @@
 @import "./styles/reset.scss";
-@import "./styles/example.scss";
 
-#main {
-    color: $color;
-    border: solid 5px $color;
+
+// #main {
+//     display: flex;
+//     position: relative;
+//     flex-direction: row;
+//     justify-content: center;
+// }
+
+#game-canvas {
+    background-color: aquamarine;
+    border-color: black;
+    border: 1px solid;
 }

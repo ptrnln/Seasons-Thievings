@@ -51,7 +51,8 @@ table {
   border-spacing: 0;
 }
 
-#main {
-  color: purple;
-  border: solid 5px purple;
+#game-canvas {
+  background-color: aquamarine;
+  border-color: black;
+  border: 1px solid;
 }
