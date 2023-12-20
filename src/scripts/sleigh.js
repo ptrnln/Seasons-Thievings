@@ -2,7 +2,6 @@ import GameObject from "./game_object";
 
 class Sleigh extends GameObject {
     constructor(game, canvas, id, pos) {
-        debugger
         super(game, canvas, id, pos);
         this.tangible = false;
         this.static = true;

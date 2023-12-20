@@ -4,17 +4,25 @@ class SpriteAnimation {
     constructor(name, imageArray = [], repeats = true) {
         this.name = name;
         this.queue = imageArray;
-        this.currentFrame = this.queue[0];
-        this.counter;
         this.repeats = repeats;
-        const animationLooper = setInterval(() => {
-            if (!!this.counter) this.counter = 0;
-            if (!this.repeats && (!!this.counter || this.counter === this.loop.length)) {
+        this.counter;
+        this.currentFrame = this.currentFrame.bind(this);
+        this.animationLooper = setInterval(() => {
+            if (!this.counter && !this.repeats)  {
+                this.counter = 0;
+            }
+            if (!!this.counter && this.counter === this.queue.length) {
                 this.counter = undefined;
-                clearInterval(animationLooper);
-            } else this.rotate();
-            counter++;
+                clearInterval(this.animationLooper);
+                return;
+            }
+            this.rotate();
+            this.counter++;
         }, 100);
+    }
+
+    currentFrame() {
+        return this.queue[0];
     }
 
     addFrame(image) {

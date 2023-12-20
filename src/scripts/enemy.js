@@ -1,4 +1,5 @@
 import Entity from "./entity";
+import SpriteAnimation from "./sprite_animation";
 
 class Enemy extends Entity {
     constructor(game, canvas, id, pos = [0, 0]) {
@@ -17,11 +18,23 @@ class Enemy extends Entity {
         this.dead = false;
         this.destination = this.game.gameObjects.filter(obj => obj.constructor.name === "Sleigh")[0].pos
         this.animations = {
-            "walkLeft": Array.from(document.querySelectorAll(".enemy_walk_left")),
-            "walkRight": Array.from(document.querySelectorAll(".enemy_walk_right")),
+            "walk_left": new SpriteAnimation( 
+                "walk_left",
+                Array.from(document.querySelectorAll(".enemy_walk_left")),
+                true
+            ),
+            "walk_right": new SpriteAnimation(
+                "walk_right",
+                Array.from(document.querySelectorAll(".enemy_walk_right")),
+                true
+            ),
             // "fleeLeft": Array.from(document.querySelectorAll(".enemy_flee_left")),
             // "fleeRight": Array.from(document.querySelectorAll(".enemy_flee_right"))
-            "death": Array.from(document.querySelectorAll(".enemy_death_right_w_gift"))
+            "death": new SpriteAnimation(
+                "death",
+                Array.from(document.querySelectorAll(".enemy_death_right_w_gift")),
+                false
+            )
 
         }
         this.currentLoop = () => {
@@ -31,8 +44,8 @@ class Enemy extends Entity {
                 repeats: false
             }
             return { 
-                name: "walkLeft",
-                content: this.animations["walkLeft"],
+                name: "walk_left",
+                content: this.animations["walk_left"],
                 repeats: true
             } 
             let actionStr = "";
@@ -102,14 +115,17 @@ class Enemy extends Entity {
                     }
             }
         };
-        this.width = this.currentLoop().content[0].width;
-        this.height = this.currentLoop().content[0].height;
+        this.hitBoxImg = new Image();
+        this.hitBoxImg.src = this.currentLoop().content.queue[0].src;
+        this.width = this.hitBoxImg.width;
+        this.height = this.hitBoxImg.height;
         this.currentLoop = this.currentLoop.bind(this);
         this.collidesWith = this.collidesWith.bind(this);
         this.render = this.render.bind(this);
     }
 
     fuckinDies() {
+        if (this.dead) return;
         this.tangible = false;
         this.dead = true;
         setTimeout(() => {

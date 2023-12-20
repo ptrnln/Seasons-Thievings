@@ -17,21 +17,52 @@ class Player extends Entity {
                 "walk_right", 
                 Array.from(document.querySelectorAll(".elf_walk_right")),
                 true
-                ),
+            ),
             "walk_left": new SpriteAnimation(
                 "walk_left",
                 Array.from(document.querySelectorAll(".elf_walk_left")),
                 true
-            "walkDown": Array.from(document.querySelectorAll(".elf_walk_down")),
-            "walkUp": Array.from(document.querySelectorAll(".elf_walk_up")),
-            "punchLeft": Array.from(document.querySelectorAll(".elf_punch_left")),
-            "punchRight": Array.from(document.querySelectorAll(".elf_punch_right")),
-            "idle": [
-            Array.from(document.querySelectorAll(".elf_walk_up"))[4],
-            document.querySelector(".elf_walk_left"),
-            document.querySelector(".elf_walk_down"),
-            document.querySelector(".elf_walk_right")
-            ]
+            ),
+            "walk_down": new SpriteAnimation(
+                "walk_down",
+                Array.from(document.querySelectorAll(".elf_walk_down")),
+                true
+            ),
+            "walk_up": new SpriteAnimation(
+                "walk_up",
+                Array.from(document.querySelectorAll(".elf_walk_up")),
+                true
+            ),
+            "punch_left": new SpriteAnimation(
+                "punch_left",
+                Array.from(document.querySelectorAll(".elf_punch_left")),
+                false
+            ),
+            "punch_right": new SpriteAnimation(
+                "punch_right",
+                Array.from(document.querySelectorAll(".elf_punch_right")),
+                false
+            ),
+            "idle_left": new SpriteAnimation(
+                "idle_left",
+                [document.querySelector(".elf_walk_left")],
+                false
+            ),
+            "idle_right": new SpriteAnimation(
+                "idle_right",
+                [document.querySelector(".elf_walk_right")],
+                false
+            ),
+            "idle_up": new SpriteAnimation(
+                "idle_up",
+                [Array.from(document.querySelectorAll(".elf_walk_up"))[4]],
+                false
+            ),
+            "idle_down": new SpriteAnimation(
+                "idle_down",
+                [document.querySelector(".elf_walk_down")],
+                false
+            )
         };
         this.facing = "l";
         this.moving = false;
@@ -52,7 +83,7 @@ class Player extends Entity {
                 case "i-u":
                     return {
                         name: "idle_up",
-                        content: [this.animations["idle"][0]],
+                        content: this.animations["idle_up"],
                         repeats: false
                     }
                 case "w-l":
@@ -64,7 +95,7 @@ class Player extends Entity {
                 case "i-l":
                     return {
                         name: "idle_left",
-                        content: [this.animations["idle"][1]],
+                        content: this.animations["idle_left"],
                         repeats: false
                     }
                 case "p-l":
@@ -82,7 +113,7 @@ class Player extends Entity {
                 case "i-d":
                     return {
                         name: "idle_down",
-                        content: [this.animations["idle"][2]],
+                        content: this.animations["idle_down"],
                         repeats: false
                     }
                 case "w-r":
@@ -94,7 +125,7 @@ class Player extends Entity {
                 case "i-r":
                     return {
                         name: "idle_right",
-                        content: [this.animations["idle"][3]],
+                        content: this.animations["idle_right"],
                         repeats: false
                     }
                     case "p-r":
@@ -106,7 +137,7 @@ class Player extends Entity {
             }
         };
         this.hitBoxImg = new Image()
-        this.hitBoxImg.src = this.animations["walkLeft"][0].src;
+        this.hitBoxImg.src = this.animations["walk_left"].currentFrame().src;
         this.width = this.hitBoxImg.width;
         this.height = this.hitBoxImg.height;
         this.speed = 3;
@@ -120,7 +151,7 @@ class Player extends Entity {
     }
 
     render() {
-        this.ctx.drawImage(this.currentLoop().content[0], ...this.pos)
+        this.ctx.drawImage(this.animations[this.currentLoop().name].currentFrame(), ...this.pos)
         // this.ctx.beginPath();
         // this.ctx.moveTo(...this.pos);
         // this.ctx.lineTo(this.right(), this.top());

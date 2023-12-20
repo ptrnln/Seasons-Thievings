@@ -16,20 +16,20 @@ class Entity extends GameObject {
         this.collidesWith = this.collidesWith.bind(this);
         // this.width = canvas.dataset.scale * this.fullHeight;
         // this.height = canvas.dataset.scale * this.fullWidth;
-        this.animationLooper = setInterval((that = this) => {
-            if (!that.currentLoop().repeats && !that.animCounter) {
-                that.animCounter = 0
-            }
-            if (!that.animCounter || that.animCounter < that.currentLoop.length) {
-                let loop = that.currentLoop().content;
-                if (that.moving || that.punching) that.animations[that.currentLoop().name] = loop.slice(1).concat(loop.slice(0, 1));
-            }
-            if (!!that.animCounter) that.animCounter++;
-        }, 75);
+        // this.animationLooper = setInterval((that = this) => {
+        //     if (!that.currentLoop().repeats && !that.animCounter) {
+        //         that.animCounter = 0
+        //     }
+        //     if (!that.animCounter || that.animCounter < that.currentLoop.length) {
+        //         let loop = that.currentLoop().content;
+        //         if (that.moving || that.punching) that.animations[that.currentLoop().name] = loop.slice(1).concat(loop.slice(0, 1));
+        //     }
+        //     if (!!that.animCounter) that.animCounter++;
+        // }, 75);
     }
 
     render() {
-        this.ctx.drawImage(this.currentLoop().content[0], ...this.pos)
+        this.ctx.drawImage(this.animations[this.currentLoop().name].currentFrame(), ...this.pos)
         // this.ctx.beginPath();
         // this.ctx.moveTo(...this.pos);
         // this.ctx.lineTo(this.right(), this.top());
