@@ -20,18 +20,21 @@ class Enemy extends Entity {
         this.animations = {
             "walk_left": new SpriteAnimation( 
                 "walk_left",
+                this,
                 Array.from(document.querySelectorAll(".enemy_walk_left")),
                 true
             ),
             "walk_right": new SpriteAnimation(
                 "walk_right",
+                this,
                 Array.from(document.querySelectorAll(".enemy_walk_right")),
                 true
             ),
             // "fleeLeft": Array.from(document.querySelectorAll(".enemy_flee_left")),
             // "fleeRight": Array.from(document.querySelectorAll(".enemy_flee_right"))
-            "death": new SpriteAnimation(
-                "death",
+            "death_w_gift": new SpriteAnimation(
+                "death_w_gift",
+                this,
                 Array.from(document.querySelectorAll(".enemy_death_right_w_gift")),
                 false
             )
@@ -39,8 +42,8 @@ class Enemy extends Entity {
         }
         this.currentLoop = () => {
             if (this.dead) return {
-                name: "death",
-                content: this.animations["death"],
+                name: "death_w_gift",
+                content: this.animations["death_w_gift"],
                 repeats: false
             }
             return { 
@@ -162,6 +165,16 @@ class Enemy extends Entity {
                     yOutsideValues[Math.floor(Math.random() * 2)]
                     ]
         }
+    }
+
+    clone() {
+        return new Enemy(this.game, this.canvas, this.game.gameObjects.length, this.pos)
+    }
+
+    '=='(otherEnemyInst) {
+        return this.pos.every((coord, i = 0) => {
+            coord === otherEnemyInst.pos[i];
+        })
     }
 }
 
