@@ -59,6 +59,9 @@ class GameObject {
             this.width, // width
             this.height // height
         )
+    }
+
+    renderDebug() {
         this.ctx.strokeStyle = 'yellow'
         this.ctx.beginPath();
         this.ctx.moveTo(...this.pos);

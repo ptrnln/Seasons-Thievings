@@ -1,16 +1,16 @@
 class Keyboard {
-    constructor() {
-        this.keyMap = {};
-
+    constructor(game) {
+        this.keyMap = new Map;
+        this.game = game;
         this.getMove = this.getMove.bind(this);
-        this.keybindings = {
+        this.keybindings = new Map({
             up: ["KeyW", "ArrowUp"],
             left: ["KeyA", "ArrowLeft"],
             down: ["KeyS", "ArrowDown"],
             right: ["KeyD", "ArrowRight"],
             attack: ["Space"],
             enterDebug: ["Tab"]
-        }
+        })
         this.lastPressed;
         this.lastReleased;
         
@@ -18,7 +18,7 @@ class Keyboard {
             e = e || event;
             if (e.repeat) return;
             if (this.listKeybindings().includes(e.code)) {
-                if (e.code === "Tab") debugger;
+                if (e.code === "Tab") this.game.toggleDebug();
                 this.keyMap[e.code] = (e.type === 'keydown');
                 this.lastPressed = e.code;
             }
@@ -38,21 +38,40 @@ class Keyboard {
     getMove() {
         if(!!this.keyMap["Space"]) return "p";
         let dirStr = "";
-        (!!this.keyMap["ArrowUp"] || !!this.keyMap["KeyW"]) ? dirStr += 't' : dirStr += 'f';
-        (!!this.keyMap["ArrowLeft"] || !!this.keyMap["KeyA"]) ? dirStr += 't' : dirStr += 'f';
-        (!!this.keyMap["ArrowDown"] || !!this.keyMap["KeyS"]) ? dirStr += 't' : dirStr += 'f';
-        (!!this.keyMap["ArrowRight"] || !!this.keyMap["KeyD"]) ? dirStr += 't' : dirStr += 'f';
 
-        if (dirStr === 'tfff' || dirStr === 'ttft') return "u";
-        if (dirStr === 'ftff' || dirStr === 'tttf') return "l";
-        if (dirStr === 'fftf' || dirStr === 'fttt') return "d";
-        if (dirStr === 'ffft' || dirStr === 'tftt') return "r";
-        if (dirStr === 'ttff') return "ul";
-        if (dirStr === 'tfft') return "ur";
-        if (dirStr === 'fttf') return "dl";
-        if (dirStr === 'fftt') return "dr";
-        if (['ffff','tttt','tftf','ftft'].some(map => map === dirStr)) {
-                return "i";
+        let pressed = this.keyMap.keys.filter(key => this.keyMap[key])
+        if (this.keybindings.attack.some(keybinding => pressed.includes(keybinding))) return 'p' 
+        this.keybindings.up.some(keybinding => pressed.includes(keybinding)) ? dirStr += 't' : dirStr += 'f';
+        this.keybindings.left.some(keybinding => pressed.includes(keybinding)) ? dirStr += 't' : dirStr += 'f';
+        this.keybindings.down.some(keybinding => pressed.includes(keybinding)) ? dirStr += 't' : dirStr += 'f';
+        this.keybindings.right.some(keybinding => pressed.includes(keybinding)) ? dirStr += 't' : dirStr += 'f';
+
+        switch (dirStr) {
+            case 'tfff':
+            case 'ttft':
+                return 'u';
+            case 'ftff':
+            case 'tttf':
+                return 'l';
+            case 'fftf':
+            case 'fttt':
+                return 'd';
+            case 'ffft':
+            case 'tftt':
+                return 'r';
+            case 'ttff':
+                return 'ul';
+            case 'tfft':
+                return 'ur';
+            case 'fttf':
+                return 'dl';
+            case 'fftt':
+                return 'dr';
+            case 'ffff':
+            case 'tttt':
+            case 'tftf':
+            case 'ftft':
+                return 'i';
         }
     }
     

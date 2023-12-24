@@ -108,6 +108,6 @@ const animationList = {
     // ]
 }
 
-console.log(animationList.Player.walk_left.sourceFiles)
+// console.log(animationList.Player.walk_left.sourceFiles)
 
-// export default animationList;
+export default animationList;

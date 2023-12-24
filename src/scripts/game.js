@@ -15,7 +15,11 @@ class Game {
 
         // let player = new Player(this.gameObjects.length);
         this.paused = false;
+
+        this.debugMode = false;
         this.player = new Player(this, canvas, this.gameObjects.length);
+
+
         
         this.addObject = this.addObject.bind(this)
         this.removeObject = this.removeObject.bind(this);
@@ -98,6 +102,10 @@ class Game {
                 }
             }
         }
+    }
+
+    toggleDebug() {
+
     }
 
     // redraw() {

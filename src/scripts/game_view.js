@@ -53,6 +53,9 @@ class GameView {
             // this.ctx.lineTo(gameObject.centerHorz(), 0);
             // this.ctx.stroke();
            if (!gameObject.invisible) gameObject.render();
+           if (this.game.debugMode) {
+                gameObject.renderDebug()
+           }
         })
     }
 
