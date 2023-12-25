@@ -171,7 +171,7 @@ class Enemy extends Entity {
         return new Enemy(this.game, this.canvas, this.game.gameObjects.length, this.pos)
     }
 
-    '=='(otherEnemyInst) {
+    isSame(otherEnemyInst) {
         return this.pos.every((coord, i = 0) => {
             coord === otherEnemyInst.pos[i];
         })

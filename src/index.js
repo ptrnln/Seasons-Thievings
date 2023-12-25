@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let canvas = document.getElementById("game-canvas");
     // let ctx = canvas.getContext("2d");
 
+    debugger
+
     canvas.dataset.maxWidth = 900;
     canvas.width = canvas.dataset.maxWidth;
     canvas.height = (.60 * canvas.width);

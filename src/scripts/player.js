@@ -14,7 +14,6 @@ class Player extends Entity {
         this.bottom = this.bottom.bind(this);
         this.right = this.right.bind(this);
         this.animations = AnimationList.Player;
-        console.log(this.animations);
         this.facing = "r";
         this.moving = false;
         this.punching = false;

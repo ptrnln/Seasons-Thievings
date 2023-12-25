@@ -105,7 +105,7 @@ class Game {
     }
 
     toggleDebug() {
-
+        this.debugMode ? this.debugMode = false : this.debugMode = true;
     }
 
     // redraw() {
