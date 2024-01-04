@@ -71,6 +71,8 @@ class GameObject {
 
     update() {
         this.lastPos = this.pos;
+        if(this.lastAction !== this.currentAction()) this.updateAnimation(this.currentAction())
+        this.lastAction = this.currentAction;
         if (!this.static) {
             this.moving = true;
             this.pos = this.getMove();

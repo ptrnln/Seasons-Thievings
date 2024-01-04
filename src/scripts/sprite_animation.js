@@ -1,9 +1,11 @@
+import { AssetLoader } from "./application_helper";
 
+const al = new AssetLoader();
 
 class SpriteAnimation {
-    constructor(name, imageArray = [], repeats = true) {
+    constructor({ name, repeats = true }) {
         this.name = name;
-        this.queue = imageArray;
+        this.queue;
         this.repeats = repeats;
         this.counter;
         this.currentFrame = this.currentFrame.bind(this);
@@ -19,6 +21,7 @@ class SpriteAnimation {
             this.rotate();
             this.counter++;
         }, 100);
+        this.populate();
     }
 
     currentFrame() {
@@ -33,11 +36,18 @@ class SpriteAnimation {
     rotate() {
         this.queue = this.queue.slice(1).concat(this.queue.slice(0, 1));
     }
+
+    populate() {
+        this.queue = al.loadAssets(this.name)
+    }
     
     // removeFrame(image) {
     //     this.queue = ;
     // }
 
+    cease() {
+        clearInterval(this.animationLooper);
+    }
     
 }
 

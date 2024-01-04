@@ -1,5 +1,8 @@
 const path = require('path');
+// import path from 'path';
+// import { MiniCssExtractPlugin } from 'mini-css-extract-plugin';
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+
 
 const config = {
   entry: [
@@ -42,3 +45,18 @@ module.exports = (env, argv) => {
 
   return config;
 }
+
+// module.exports = {
+//   output: {
+//     filename: 'main.js',
+//     path: path.resolve(__dirname, 'dist')
+//   },
+//    module: {
+//     rules: [
+//       {
+//         test: (/\.png/),
+//         type: 'asset/resource'
+//       }
+//     ]
+//  },
+// };
